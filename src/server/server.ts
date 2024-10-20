@@ -2,6 +2,7 @@ import http from 'node:http';
 import url from 'node:url';
 import handleGetRequest from './serverGetRequests';
 import handlePostRequests from './serverPostRequests';
+import handlePutRequests from './serverPutRequests';
 import { ISendResponse } from '../types/serverControllersTypes';
 
 const PORT = 3000;
@@ -16,6 +17,8 @@ const server = http.createServer((req, res) => {
     handleGetRequest({ res, parsedUrl });
   } else if (req.method === 'POST') {
     handlePostRequests({ req, res });
+  } else if (req.method === 'PUT' && parsedUrl) {
+    handlePutRequests({ req, res, parsedUrl });
   }
 });
 

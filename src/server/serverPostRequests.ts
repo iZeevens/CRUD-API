@@ -1,7 +1,7 @@
+import users from './serverUsers';
 import { IHandlePostRequests } from '../types/serverControllersTypes';
 import { validateFields } from '../utils/validateFields';
 import { sendResponse } from './server';
-import users from './serverUsers';
 import { v4 as uuidv4 } from 'uuid';
 
 const handlePostRequests = ({ req, res }: IHandlePostRequests) => {

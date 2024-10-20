@@ -15,6 +15,13 @@ interface ISendResponse {
   data: IUsers[] | IUsers | { message: string };
 }
 
+interface IIsUserExist {
+  userId: string;
+  res: http.ServerResponse<http.IncomingMessage> & {
+    req: http.IncomingMessage;
+  };
+}
+
 interface IHandleGetRequest {
   res: http.ServerResponse<http.IncomingMessage> & {
     req: http.IncomingMessage;
@@ -29,4 +36,12 @@ interface IHandlePostRequests {
   req: http.IncomingMessage;
 }
 
-export { IUsers, ISendResponse, IHandleGetRequest, IHandlePostRequests };
+interface IHandlePutRequests {
+  req: http.IncomingMessage;
+  res: http.ServerResponse<http.IncomingMessage> & {
+    req: http.IncomingMessage;
+  };
+  parsedUrl: string;
+}
+
+export { IUsers, IIsUserExist, ISendResponse, IHandleGetRequest, IHandlePostRequests, IHandlePutRequests };

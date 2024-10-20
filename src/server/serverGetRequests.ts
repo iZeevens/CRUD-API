@@ -1,7 +1,7 @@
 import users from './serverUsers';
-import { validate as isUuidValid } from 'uuid';
 import { IHandleGetRequest } from '../types/serverControllersTypes';
 import { sendResponse } from './server';
+import isUserExist from '../utils/isUserExist';
 
 const handleGetRequest = ({ res, parsedUrl }: IHandleGetRequest) => {
   const urlSplit = parsedUrl.split('/').slice(1);
@@ -9,14 +9,9 @@ const handleGetRequest = ({ res, parsedUrl }: IHandleGetRequest) => {
   if (parsedUrl === '/api/users') {
     sendResponse({ res, statusCode: 200, data: users });
   } else if (parsedUrl.startsWith('/api/users') && urlSplit.length === 3) {
-    const userUuid = urlSplit[2];
-    const resultOfFindUser = users.find((user) => user.id === userUuid);
-    if (resultOfFindUser) {
-      sendResponse({ res, statusCode: 200, data: resultOfFindUser });
-    } else if (!isUuidValid(userUuid)) {
-      sendResponse({ res, statusCode: 400, data: { message: 'UserId is invalid' } });
-    } else {
-      sendResponse({ res, statusCode: 404, data: { message: 'User doesn`t exist' } });
+    const resultOfFindUser = isUserExist({ userId: urlSplit[2], res });
+    if (typeof resultOfFindUser?.index === 'number' && resultOfFindUser?.index >= 0) {
+      sendResponse({ res, statusCode: 200, data: users[resultOfFindUser.index] });
     }
   } else {
     sendResponse({
