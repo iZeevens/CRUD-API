@@ -7,7 +7,8 @@ import isUserExist from '../utils/isUserExist';
 const handlePutRequests = ({ req, res, parsedUrl }: IHandlePutRequests) => {
   const urlSplit = parsedUrl.split('/').slice(1);
   const resultOfFindUser = isUserExist({ userId: urlSplit[2], res });
-  if (typeof resultOfFindUser?.index === 'number' && resultOfFindUser?.index >= 0) {
+  const userIndex = resultOfFindUser?.index;
+  if (typeof userIndex === 'number' && userIndex !== 0) {
     let body = '';
 
     req.on('data', (chunk) => {
@@ -19,15 +20,15 @@ const handlePutRequests = ({ req, res, parsedUrl }: IHandlePutRequests) => {
       const validate = validateFields(updatedFields);
 
       if (validate.valid) {
-        users[resultOfFindUser.index] = {
-          ...users[resultOfFindUser.index],
+        users[userIndex] = {
+          ...users[userIndex],
           ...updatedFields,
         };
 
         sendResponse({
           res,
           statusCode: 200,
-          data: users[resultOfFindUser.index],
+          data: users[userIndex],
         });
       } else {
         sendResponse({ res, statusCode: 400, data: { message: validate.message as string } });

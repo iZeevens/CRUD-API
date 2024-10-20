@@ -1,8 +1,9 @@
 import http from 'node:http';
 import url from 'node:url';
-import handleGetRequest from './serverGetRequests';
-import handlePostRequests from './serverPostRequests';
-import handlePutRequests from './serverPutRequests';
+import handleGetRequest from './serverGetRequest';
+import handlePostRequests from './serverPostRequest';
+import handlePutRequests from './serverPutRequest';
+import handleDeleteRequest from './serverDeleteRequest';
 import { ISendResponse } from '../types/serverControllersTypes';
 
 const PORT = 3000;
@@ -19,6 +20,8 @@ const server = http.createServer((req, res) => {
     handlePostRequests({ req, res });
   } else if (req.method === 'PUT' && parsedUrl) {
     handlePutRequests({ req, res, parsedUrl });
+  } else if (req.method === 'DELETE' && parsedUrl) {
+    handleDeleteRequest({ res, parsedUrl });
   }
 });
 
