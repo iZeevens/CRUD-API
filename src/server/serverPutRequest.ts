@@ -8,7 +8,7 @@ const handlePutRequests = ({ req, res, parsedUrl }: IHandlePutRequests) => {
   const urlSplit = parsedUrl.split('/').slice(1);
   const resultOfFindUser = isUserExist({ userId: urlSplit[2], res });
   const userIndex = resultOfFindUser?.index;
-  if (typeof userIndex === 'number' && userIndex !== 0) {
+  if (typeof userIndex === 'number' && userIndex >= 0) {
     let body = '';
 
     req.on('data', (chunk) => {

@@ -7,11 +7,21 @@ import handleDeleteRequest from './serverDeleteRequest';
 import { ISendResponse } from '../types/serverControllersTypes';
 
 const PORT = 3000;
+const sendResponse = ({ res, statusCode, data }: ISendResponse) => {
+  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(data));
+};
+
 const server = http.createServer((req, res) => {
   let parsedUrl;
 
   if (req.url) {
     parsedUrl = url.parse(req.url, true).pathname;
+  }
+
+  if (!parsedUrl?.startsWith('/api/users')) {
+    sendResponse({ res, statusCode: 404, data: { message: 'This endpoint doesn`t exist' } });
+    return;
   }
 
   if (req.method === 'GET' && parsedUrl) {
@@ -22,13 +32,11 @@ const server = http.createServer((req, res) => {
     handlePutRequests({ req, res, parsedUrl });
   } else if (req.method === 'DELETE' && parsedUrl) {
     handleDeleteRequest({ res, parsedUrl });
+  } else {
+    sendResponse({ res, statusCode: 404, data: { message: 'This endpoint doesn`t exist' } });
+    return;
   }
 });
-
-const sendResponse = ({ res, statusCode, data }: ISendResponse) => {
-  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify(data));
-};
 
 server.listen(PORT, () => {
   console.log(`User server listening on port ${PORT}`);
