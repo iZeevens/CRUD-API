@@ -1,6 +1,7 @@
 import users from './serverUsers';
 import { IHandlePutRequests } from '../types/serverControllersTypes';
 import { sendResponse } from './server';
+import { validateFields } from '../utils/validateFields';
 import isUserExist from '../utils/isUserExist';
 
 const handlePutRequests = ({ req, res, parsedUrl }: IHandlePutRequests) => {
@@ -15,22 +16,22 @@ const handlePutRequests = ({ req, res, parsedUrl }: IHandlePutRequests) => {
 
     req.on('end', () => {
       const updatedFields = JSON.parse(body);
+      const validate = validateFields(updatedFields);
 
-      if ('id' in updatedFields) {
-        delete updatedFields.id;
+      if (validate.valid) {
+        users[resultOfFindUser.index] = {
+          ...users[resultOfFindUser.index],
+          ...updatedFields,
+        };
+
+        sendResponse({
+          res,
+          statusCode: 200,
+          data: users[resultOfFindUser.index],
+        });
+      } else {
+        sendResponse({ res, statusCode: 400, data: { message: validate.message as string } });
       }
-
-      users[resultOfFindUser.index] = {
-        ...users[resultOfFindUser.index],
-        ...updatedFields,
-      };
-
-      console.log(users);
-      sendResponse({
-        res,
-        statusCode: 200,
-        data: users[resultOfFindUser.index],
-      });
     });
   }
 };

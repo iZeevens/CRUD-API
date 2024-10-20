@@ -1,11 +1,11 @@
 import { IUsers } from '../types/serverControllersTypes';
 
 const validateFields = (data: IUsers) => {
-  const { username, age, hobbies } = data;
-
-  if (Object.keys(data).length !== 3) {
-    return { valid: false, message: 'Must have exactly 3 params - username, age, and hobbies' };
+  if ('id' in data) {
+    delete data.id;
   }
+
+  const { username, age, hobbies } = data;
 
   if (!username && typeof username !== 'string') {
     return { valid: false, message: 'Invalid or missing "username"' };
