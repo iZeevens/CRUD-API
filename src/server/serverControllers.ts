@@ -6,12 +6,16 @@ const sendResponse = ({ res, statusCode, data }: ISendResponse) => {
   res.end(JSON.stringify(data));
 };
 
-const handleGetRequest = ({ req, res, parsedUrl }: IHandleGetRequest) => {
-  if (parsedUrl === 'api/users') {
+const handleGetRequest = ({ res, parsedUrl }: IHandleGetRequest) => {
+  if (parsedUrl === '/api/users') {
     sendResponse({ res, statusCode: 200, data: users });
+  } else {
+    sendResponse({
+      res,
+      statusCode: 404,
+      data: { message: 'Not Found' },
+    });
   }
-
-  console.log(req);
 };
 
 export default handleGetRequest;
