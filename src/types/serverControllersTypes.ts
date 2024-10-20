@@ -12,7 +12,7 @@ interface ISendResponse {
     req: http.IncomingMessage;
   };
   statusCode: number;
-  data: IUsers[] | { message: string };
+  data: IUsers[] | IUsers | { message: string };
 }
 
 interface IHandleGetRequest {
