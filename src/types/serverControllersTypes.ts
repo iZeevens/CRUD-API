@@ -1,7 +1,7 @@
 import http from 'node:http';
 
 interface IUsers {
-  id: string;
+  id?: string;
   username: string;
   age: number;
   hobbies: string[];
@@ -22,4 +22,11 @@ interface IHandleGetRequest {
   parsedUrl: string;
 }
 
-export { ISendResponse, IHandleGetRequest, IUsers };
+interface IHandlePostRequests {
+  res: http.ServerResponse<http.IncomingMessage> & {
+    req: http.IncomingMessage;
+  };
+  req: http.IncomingMessage;
+}
+
+export { IUsers, ISendResponse, IHandleGetRequest, IHandlePostRequests };

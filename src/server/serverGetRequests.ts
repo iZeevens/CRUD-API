@@ -1,11 +1,7 @@
 import users from './serverUsers';
 import { validate as isUuidValid } from 'uuid';
-import { ISendResponse, IHandleGetRequest } from '../types/serverControllersTypes';
-
-const sendResponse = ({ res, statusCode, data }: ISendResponse) => {
-  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify(data));
-};
+import { IHandleGetRequest } from '../types/serverControllersTypes';
+import { sendResponse } from './server';
 
 const handleGetRequest = ({ res, parsedUrl }: IHandleGetRequest) => {
   const urlSplit = parsedUrl.split('/').slice(1);
