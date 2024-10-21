@@ -32,6 +32,12 @@ if (cluster.isPrimary) {
       workerRes.pipe(res);
     });
 
+    proxy.on('error', (err) => {
+      console.error(`Error forwarding request to worker: ${err.message}`);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Internal Server Error (Worker failure)' }));
+    });
+
     req.pipe(proxy);
 
     currentWorker = (currentWorker + 1) % workerPorts.length;
