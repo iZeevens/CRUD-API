@@ -16,10 +16,11 @@ npm install
 
 ## Running the Application
 
-### There are two modes available: development and production.
+### There are three modes available: development, production and horizontal scaling.
 
 - **development**: npm run start:dev
 - **production**: npm run build, npm run start:prod
+- **horizontal scaling**: npm run start:multi
 
 ### Environment Setup
 
