@@ -13,7 +13,7 @@ const handlePostRequests = ({ req, res }: IHandlePostRequests) => {
 
   req.on('end', () => {
     const user = JSON.parse(body);
-    const validate = validateFields(user);
+    const validate = validateFields(user, true);
     if (validate.valid) {
       const data = { id: uuidv4(), ...user };
       users.push(data);
