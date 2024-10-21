@@ -1,4 +1,5 @@
 import users from './serverUsers';
+import cluster from 'cluster';
 import { IHandlePostRequests } from '../types/serverControllersTypes';
 import { validateFields } from '../utils/validateFields';
 import { sendResponse } from './server';
@@ -17,6 +18,10 @@ const handlePostRequests = ({ req, res }: IHandlePostRequests) => {
     if (validate.valid) {
       const data = { id: uuidv4(), ...user };
       users.push(data);
+
+      if (cluster.isWorker && process.send) {
+        process.send({ type: 'syncUsers', data: users });
+      }
       sendResponse({ res, statusCode: 201, data });
     } else {
       sendResponse({ res, statusCode: 400, data: { message: validate.message as string } });

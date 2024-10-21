@@ -1,3 +1,4 @@
+import { IUsers } from '../types/serverControllersTypes';
 import users from './serverUsers';
 import { IHandleGetRequest } from '../types/serverControllersTypes';
 import { sendResponse } from './server';
@@ -22,5 +23,11 @@ const handleGetRequest = ({ res, parsedUrl }: IHandleGetRequest) => {
     });
   }
 };
+
+process.on('message', (message: { type: string; data: IUsers[] }) => {
+  if (message.type === 'updateUsers') {
+    users.splice(0, users.length, ...message.data);
+  }
+});
 
 export default handleGetRequest;

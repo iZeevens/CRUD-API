@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import cluster from 'node:cluster';
 import http from 'node:http';
 import os from 'node:os';
+import { IUsers } from '../types/serverControllersTypes';
 import { server } from './server';
 
 dotenv.config();
@@ -10,11 +11,23 @@ const numCPUs = os.cpus().length - 1;
 let currentWorker = 0;
 const workerPorts = Array.from({ length: numCPUs }, (_, i) => PORT + (i + 1));
 
+let users: IUsers[] = [];
 if (cluster.isPrimary) {
   console.log(`Primary process ${process.pid} is running`);
 
   for (let i = 0; i < numCPUs; i++) {
-    cluster.fork({ PORT: PORT + (i + 1) });
+    const worker = cluster.fork({ PORT: PORT + (i + 1) });
+
+    worker.on('message', (message) => {
+      if (message.type === 'syncUsers') {
+        users = message.data;
+        if (cluster.workers) {
+          Object.values(cluster.workers).forEach((worker) => {
+            worker?.send({ type: 'updateUsers', data: users });
+          });
+        }
+      }
+    });
   }
 
   const loadBalancer = http.createServer((req, res) => {
@@ -56,5 +69,11 @@ if (cluster.isPrimary) {
 
   server.listen(workerPort, () => {
     console.log(`Worker ${process.pid} started on port ${workerPort}`);
+  });
+
+  process.on('message', (message: { type: string; data: IUsers[] }) => {
+    if (message.type === 'updateUsers') {
+      users = message.data;
+    }
   });
 }

@@ -1,4 +1,5 @@
 import users from './serverUsers';
+import cluster from 'node:cluster';
 import { IHandlePutRequests } from '../types/serverControllersTypes';
 import { sendResponse } from './server';
 import { validateFields } from '../utils/validateFields';
@@ -24,6 +25,10 @@ const handlePutRequests = ({ req, res, parsedUrl }: IHandlePutRequests) => {
           ...users[userIndex],
           ...updatedFields,
         };
+
+        if (cluster.isWorker && process.send) {
+          process.send({ type: 'syncUsers', data: users });
+        }
 
         sendResponse({
           res,
