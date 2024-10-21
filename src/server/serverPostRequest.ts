@@ -17,7 +17,7 @@ const handlePostRequests = ({ req, res }: IHandlePostRequests) => {
     if (validate.valid) {
       const data = { id: uuidv4(), ...user };
       users.push(data);
-      sendResponse({ res, statusCode: 200, data });
+      sendResponse({ res, statusCode: 201, data });
     } else {
       sendResponse({ res, statusCode: 400, data: { message: validate.message as string } });
     }

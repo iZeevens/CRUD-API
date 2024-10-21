@@ -8,8 +8,8 @@ const handleDeleteRequest = ({ res, parsedUrl }: IHandleGetRequest) => {
   const resultOfFindUser = isUserExist({ userId: urlSplit[2], res });
   const userIndex = resultOfFindUser?.index;
   if (typeof userIndex === 'number' && userIndex >= 0) {
-    users.splice(userIndex, 1);
-    sendResponse({ res, statusCode: 200, data: users });
+    const deletedUser = users.splice(userIndex, 1);
+    sendResponse({ res, statusCode: 204, data: deletedUser });
   }
 };
 
