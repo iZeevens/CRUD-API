@@ -6,7 +6,7 @@
     "build": "webpack --config webpack.config.mjs",
     "start:dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/server/server.ts",
     "start:prod": "cross-env NODE_ENV=production npm run build && node dist/bundle.js",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
