@@ -5,7 +5,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default {
-  entry: './src/server/serverUsers.ts',
+  entry: './src/server/index.ts',
   output: {
     filename: 'bundle.js',
     path: resolve(__dirname, 'dist'),

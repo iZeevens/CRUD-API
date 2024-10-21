@@ -12,33 +12,28 @@ const sendResponse = ({ res, statusCode, data }: ISendResponse) => {
 };
 
 const server = http.createServer((req, res) => {
-  try {
-    let parsedUrl;
+  let parsedUrl;
 
-    if (req.url) {
-      parsedUrl = url.parse(req.url, true).pathname;
-    }
+  if (req.url) {
+    parsedUrl = url.parse(req.url, true).pathname;
+  }
 
-    if (!parsedUrl?.startsWith('/api/users')) {
-      sendResponse({ res, statusCode: 404, data: { message: 'This endpoint doesn`t exist' } });
-      return;
-    }
+  if (!parsedUrl?.startsWith('/api/users')) {
+    sendResponse({ res, statusCode: 404, data: { message: 'This endpoint doesn`t exist' } });
+    return;
+  }
 
-    if (req.method === 'GET' && parsedUrl) {
-      handleGetRequest({ res, parsedUrl });
-    } else if (req.method === 'POST') {
-      handlePostRequests({ req, res });
-    } else if (req.method === 'PUT' && parsedUrl) {
-      handlePutRequests({ req, res, parsedUrl });
-    } else if (req.method === 'DELETE' && parsedUrl) {
-      handleDeleteRequest({ res, parsedUrl });
-    } else {
-      sendResponse({ res, statusCode: 404, data: { message: 'This endpoint doesn`t exist' } });
-      return;
-    }
-  } catch (error) {
-    console.error('Error in server:', error);
-    sendResponse({ res, statusCode: 500, data: { message: 'Internal Server Error' } });
+  if (req.method === 'GET' && parsedUrl) {
+    handleGetRequest({ res, parsedUrl });
+  } else if (req.method === 'POST') {
+    handlePostRequests({ req, res });
+  } else if (req.method === 'PUT' && parsedUrl) {
+    handlePutRequests({ req, res, parsedUrl });
+  } else if (req.method === 'DELETE' && parsedUrl) {
+    handleDeleteRequest({ res, parsedUrl });
+  } else {
+    sendResponse({ res, statusCode: 404, data: { message: 'This endpoint doesn`t exist' } });
+    return;
   }
 });
 
