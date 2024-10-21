@@ -44,4 +44,4 @@ server.listen(PORT, () => {
   console.log(`User server listening on port ${PORT}`);
 });
 
-export { sendResponse };
+export { server, sendResponse };
